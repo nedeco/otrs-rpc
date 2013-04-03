@@ -88,10 +88,12 @@ class OTRSRPC {
    *
    * @access  public
    *
+   * @param   array  $params  A hash of additional parameters (passed to OTRS)
+   *
    * @return  array
    */
-  public function ticket_list() {
-    $ids = $this->ticket_list_ids();
+  public function ticket_list($params = array()) {
+    $ids = $this->ticket_list_ids($params);
     if (is_array($ids)) {
       $ids_count = count($ids);
       $result = array();
@@ -112,10 +114,12 @@ class OTRSRPC {
    *
    * @access  public
    *
+   * @param   array  $params  A hash of additional parameters (passed to OTRS)
+   *
    * @return  array
    */
-  public function ticket_list_ids() {
-    return $this->ticket_search(array());
+  public function ticket_list_ids($params = array()) {
+    return $this->ticket_search($params);
   }
 
   /**
