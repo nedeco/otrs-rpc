@@ -4,11 +4,16 @@
  * OTRS API documentation: http://dev.otrs.org
  *
  * @package    otrs_rpc
- * @author     Daniel Kempkens <d.kempkens@nedeco.de>
  * @copyright  Copyright (c) 2013, nedeco GmbH
  * @license    http://opensource.org/licenses/MIT MIT License
  */
 
+/**
+ * The OTRSRPC class is used to interact with OTRS via its SOAP API.
+ *
+ * @package  otrs_rpc
+ * @author   Daniel Kempkens <d.kempkens@nedeco.de>
+ */
 class OTRSRPC {
   /**
    * Default parameters for the ticket search (passed to OTRS)
