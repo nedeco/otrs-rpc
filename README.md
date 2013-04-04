@@ -40,6 +40,10 @@ define('OTRS_DEFAULT_QUEUE_ID',    1);
 define('OTRS_DEFAULT_PRIORITY_ID', 2);
 ```
 
+## Documentation
+
+See [http://nedeco.github.com/otrs-rpc/](http://nedeco.github.com/otrs-rpc/) for the auto-generated PHPDoc.
+
 ## License
 
 MIT.
