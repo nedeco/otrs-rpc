@@ -5,10 +5,8 @@ OTRS RPC is a small library that allows you to access OTRS via PHP. The followin
 * Getting a list of all tickets
 * Getting a list of all ticket IDs
 * Searching for tickets
-* Getting a single ticket
-* Looking up a ticket number based on a ticket ID
-* Creating tickets
-* Creating articles
+* Reading, creating, updating tickets
+* Reading, creating articles
 
 One thing to note is that you **don't** have to supply key/value pairs like this:
 
@@ -32,12 +30,14 @@ See the included *demo.php* for small examples.
 The following either have to or can be set in *config.php*:
 
 ```php
-define('OTRS_BASE_URL',            'http://192.168.9.60/otrs');
-define('OTRS_USER',                'soap');
-define('OTRS_PASSWORD',            'seife');
-define('OTRS_DEFAULT_USER_ID',     1);
-define('OTRS_DEFAULT_QUEUE_ID',    1);
-define('OTRS_DEFAULT_PRIORITY_ID', 2);
+define('OTRS_BASE_URL',             'http://192.168.9.60/otrs');
+define('OTRS_USER',                 'root@localhost');
+define('OTRS_PASSWORD',             'root');
+define('OTRS_WEBSERVICE_NAME',      'example.otrs_webservice');
+define('OTRS_WEBSERVICE_NAMESPACE', 'urn:localhost:soap:functions');
+define('OTRS_DEFAULT_QUEUE_ID',     1);
+define('OTRS_DEFAULT_TYPE_ID',      1);
+define('OTRS_DEFAULT_PRIORITY_ID',  2);
 ```
 
 ## Documentation

@@ -16,22 +16,13 @@
  */
 class OTRSRPC {
   /**
-   * Default parameters for the ticket search (passed to OTRS)
-   *
-   * @access  public
-   */
-  public $defaults_ticket_search = array(
-    "UserID" => OTRS_DEFAULT_USER_ID
-  );
-
-  /**
    * Default parameters for ticket creation (passed to OTRS)
    *
    * @access  public
    */
   public $defaults_ticket_create = array(
     "QueueID" => OTRS_DEFAULT_QUEUE_ID,
-    "LockID" => 1,
+    "TypeID" => OTRS_DEFAULT_TYPE_ID,
     "PriorityID" => OTRS_DEFAULT_PRIORITY_ID,
     "State" => "new"
   );
@@ -42,8 +33,16 @@ class OTRSRPC {
    * @access  public
    */
   public $defaults_article_create = array(
-    "ContentType" => "text/plain; charset=UTF-8"
+    "MimeType" => "text/plain",
+    "Charset" => "utf8"
   );
+
+  /**
+   * Base URL to the OTRS installation
+   *
+   * @access  private
+   */
+  private $base_url;
 
   /**
    * OTRS SOAP username
@@ -60,32 +59,45 @@ class OTRSRPC {
   private $password;
 
   /**
-   * SOAP client
+   * OTRS SOAP webservice
    *
    * @access  private
    */
-  private $client;
+  private $webservice;
 
   /**
-   * Returns a new instance of the OTRSRPC class.
+   * OTRS SOAP namespace
+   *
+   * @access  private
+   */
+  private $namespace;
+
+  /**
+   * OTRS login type
+   *
+   * @access  private
+   */
+  private $login_type;
+
+  /**
+   * Creates a new instance of the OTRSRPC class.
    *
    * @access  public
    *
-   * @param   string  $base_url  Base URL of the OTRS installation
-   * @param   string  $username  OTRS SOAP username
-   * @param   string  $password  OTRS SOAP password
+   * @param   string  $base_url    Base URL of the OTRS installation
+   * @param   string  $username    OTRS SOAP username
+   * @param   string  $password    OTRS SOAP password
+   * @param   string  $webservice  OTRS webservice name
+   * @param   string  $namespace   OTRS namespace
+   * @param   string  $login_type  The type of login to use (either UserLogin or CustomerUserLogin)
    */
-  public function __construct($base_url, $username, $password) {
+  public function __construct($base_url, $username, $password, $webservice, $namespace, $login_type = 'UserLogin') {
+    $this->base_url = $base_url;
     $this->username = $username;
     $this->password = $password;
-    $this->client = new SoapClient(null, array(
-      'location' => $base_url.'/rpc.pl',
-      'uri' => 'Core',
-      'login' => $this->username,
-      'password' => $this->password,
-      'style' => SOAP_RPC,
-      'use' => SOAP_ENCODED
-    ));
+    $this->webservice = $webservice;
+    $this->namespace = $namespace;
+    $this->login_type = $login_type;
   }
 
   /**
@@ -137,12 +149,9 @@ class OTRSRPC {
    * @return  array
    */
   public function ticket_search($params) {
-    $default_params = array("TicketObject", "TicketSearch");
-    $params = array_merge($this->defaults_ticket_search, $params);
-    $params = array_merge($default_params, self::flatten_hash($params));
-    $result = $this->dispatch_call($params);
+    $result = $this->dispatch_call("TicketSearch", $params);
     if (is_array($result)) {
-      return array_keys($result);
+      return $result['TicketID'];
     } else {
       return null;
     }
@@ -153,50 +162,40 @@ class OTRSRPC {
    *
    * @access  public
    *
-   * @param   integer  $id            A ticket ID
-   * @param   array    $extra_params  A hash of additional parameters (passed to OTRS)
+   * @param   integer  $id      A ticket ID
+   * @param   array    $params  A hash of additional parameters (passed to OTRS)
    *
    * @return  array
    */
-  public function ticket_get($id, $extra_params = array()) {
-    $params = array("TicketObject", "TicketGet", "TicketID", $id);
-    $params = array_merge($params, self::flatten_hash($extra_params));
-    return $this->dispatch_call($params);
+  public function ticket_get($id, $params = array()) {
+    if (is_null($id)) { return null; }
+    $params['TicketID'] = $id;
+
+    $result = $this->dispatch_call("TicketGet", $params);
+    if (is_object($result)) {
+      return self::object_to_hash($result);
+    } else {
+      return null;
+    }
   }
 
   /**
-   * Returns a (formatted) ticket number, based on a ticket ID.
-   *
-   * @access  public
-   *
-   * @param   integer  $id  A ticket ID
-   *
-   * @return  string
-   */
-  public function ticket_number_lookup($id) {
-    $params = array("TicketObject", "TicketNumberLookup", "TicketID", $id);
-    $number = $this->dispatch_call($params);
-    return (is_null($number)) ? null : number_format($number, 0, '.', '');
-  }
-
-  /**
-   * Creates a new ticket.
+   * Creates a new ticket with an article.
    *
    * @access  public
    *
    * @param   array  $params  A hash of parameters (passed to OTRS)
    *
-   * @return  integer
+   * @return  array
    */
-  public function ticket_create($params) {
-    $default_params = array("TicketObject", "TicketCreate");
-    $params = array_merge($this->defaults_ticket_create, $params);
-    $params = array_merge($default_params, self::flatten_hash($params));
-    return $this->dispatch_call($params);
+  public function ticket_article_create($params) {
+    $params['Ticket'] = array_merge($this->defaults_ticket_create, $params['Ticket']);
+    $params['Article'] = array_merge($this->defaults_article_create, $params['Article']);
+    return $this->dispatch_call("TicketCreate", $params);
   }
 
   /**
-   * Creates a new article.
+   * Add a new article to an existing ticket.
    *
    * @access  public
    *
@@ -205,31 +204,35 @@ class OTRSRPC {
    *
    * @return  integer
    */
-  public function article_create($id, $params) {
-    $default_params = array("TicketObject", "ArticleCreate", "TicketID", $id);
-    $params = array_merge($this->defaults_article_create, $params);
-    $params = array_merge($default_params, self::flatten_hash($params));
-    return $this->dispatch_call($params);
-  }
+  public function ticket_article_add($id, $params) {
+    $soap_params = array();
+    $soap_params['TicketID'] = $id;
+    $soap_params['Article'] = array_merge($this->defaults_article_create, $params);
 
-  /**
-   * Creates a ticket and a related article.
-   *
-   * @access  public
-   *
-   * @param   array  $param_ticket   A hash of ticket parameters (passed to OTRS)
-   * @param   array  $param_article  A hash of article parameters (passed to OTRS)
-   *
-   * @return  array
-   */
-  public function ticket_create_with_article($param_ticket, $param_article) {
-    $ticket_id = $this->ticket_create($param_ticket);
-    if (is_int($ticket_id)) {
-      $article_id = $this->article_create($ticket_id, $param_article);
-      return array("TicketID" => $ticket_id, "ArticleID" => $article_id);
+    $result = $this->dispatch_call("TicketUpdate", $soap_params);
+    if (is_array($result)) {
+      return $result['ArticleID'];
     } else {
       return null;
     }
+  }
+
+  /**
+   * Edits a ticket based on an ID.
+   *
+   * @access  public
+   *
+   * @param   integer  $id      A ticket ID
+   * @param   array    $params  A hash of parameters (passed to OTRS)
+   *
+   * @return  array
+   */
+  public function ticket_update($id, $params) {
+    $soap_params = array();
+    $soap_params['TicketID'] = $id;
+    $soap_params['Ticket'] = $params;
+
+    return $this->dispatch_call("TicketUpdate", $soap_params);
   }
 
   /**
@@ -237,71 +240,56 @@ class OTRSRPC {
    *
    * @access  private
    *
-   * @param   array  $params  A list (flattened hash) of parameters (passed to OTRS)
+   * @param   string  $endpoint  Name of the generic OTRS endpoint
+   * @param   array   $params    A hash of parameters (passed to OTRS)
+   *
+   * @return  mixed
    */
-  private function dispatch_call($params) {
-    $default_params = array($this->username, $this->password);
-    $soap_result = $this->client->__soapCall('Dispatch', array_merge($default_params, $params));
-    if (is_array($soap_result)) {
-      return self::inflate_array($soap_result);
-    } else {
-      return $soap_result;
+  private function dispatch_call($endpoint, $params) {
+    $soap_params = array();
+    $soap_params[] = new SoapParam($this->username, $this->login_type);
+    if (!is_null($this->password)) {
+      $soap_params[] = new SoapParam($this->password, "Password");
+    }
+    foreach($params as $key => $value) {
+      $soap_params[] = new SoapParam($value, $key);
+    }
+
+    try {
+      $client = new SoapClient(null, array(
+        'location' => $this->base_url.'/nph-genericinterface.pl/Webservice/'.$this->webservice,
+        'uri' => $this->namespace,
+        'trace' => 1,
+        'style' => SOAP_RPC,
+        'use' => SOAP_ENCODED
+      ));
+
+      $result = $client->__soapCall($endpoint, $soap_params);
+      unset($client);
+      return $result;
+    } catch (SoapFault $fault) {
+      unset($client);
+      return null;
     }
   }
 
   /**
-   * Makes a flat list from out of a hash.
+   * Converts an object to a hash
    *
-   * @access  public
+   * @access  private
    * @static
    *
-   * @param   array  $arr  The hash that should be flattened
+   * @param   object  $obj  Object to convert
    *
    * @return  array
    */
-  public static function flatten_hash($arr) {
-    $keys = array_keys($arr);
-    $values = array_values($arr);
-    $arr_count = count($arr);
-    $result = array();
-
-    for($i = 0; $i < $arr_count; ++$i) {
-      $result[] = $keys[$i];
-      $result[] = $values[$i];
+  private static function object_to_hash($obj) {
+    $arr = array();
+    $arr_obj = is_object($obj) ? get_object_vars($obj) : $obj;
+    foreach ($arr_obj as $key => $value) {
+      $value = (is_array($value) || is_object($value)) ? self::object_to_hash($value) : $value;
+      $arr[$key] = $value;
     }
-
-    return $result;
-  }
-
-  /**
-   * Makes a hash out of a flat list.
-   *
-   * @access  public
-   * @static
-   *
-   * @param   array  $arr  The list that should be inflated
-   *
-   * @return  array
-   */
-  public static function inflate_array($arr) {
-    $arr_values = array_values($arr);
-    $arr_count = count($arr_values);
-    $result_keys = array();
-    $result_values = array();
-
-    for($i = 0; $i < $arr_count; ++$i) {
-      if ($i % 2 == 0) { # Key
-        $result_keys[] = $arr_values[$i];
-      } else { # Value
-        $value = $arr_values[$i];
-        if (is_array($value)) {
-          $result_values[] = self::inflate_array($value);
-        } else {
-          $result_values[] = $value;
-        }
-      }
-    }
-
-    return array_combine($result_keys, $result_values);
+    return $arr;
   }
 }
