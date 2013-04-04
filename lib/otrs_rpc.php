@@ -162,8 +162,8 @@ class OTRSRPC {
    *
    * @access  public
    *
-   * @param   integer  $id      A ticket ID
-   * @param   array    $params  A hash of additional parameters (passed to OTRS)
+   * @param   int    $id      A ticket ID
+   * @param   array  $params  A hash of additional parameters (passed to OTRS)
    *
    * @return  array
    */
@@ -199,8 +199,8 @@ class OTRSRPC {
    *
    * @access  public
    *
-   * @param   integer  $id      A ticket ID
-   * @param   array    $params  A hash of parameters (passed to OTRS)
+   * @param   int    $id      A ticket ID
+   * @param   array  $params  A hash of parameters (passed to OTRS)
    *
    * @return  integer
    */
@@ -222,8 +222,8 @@ class OTRSRPC {
    *
    * @access  public
    *
-   * @param   integer  $id      A ticket ID
-   * @param   array    $params  A hash of parameters (passed to OTRS)
+   * @param   int    $id      A ticket ID
+   * @param   array  $params  A hash of parameters (passed to OTRS)
    *
    * @return  array
    */
