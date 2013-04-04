@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project version="2.0.0a12" title="">
-  <file path="otrs_rpc.php" hash="f4047c3f7956d250072c0d1c04c034a1" package="otrs\rpc">
+  <file path="otrs_rpc.php" hash="99784ecce3450698eb70489d8b54c6d8" package="otrs\rpc">
     <docblock line="2">
       <description>PHP interface to OTRS' RPC interface.</description>
       <long-description>&lt;p&gt;OTRS API documentation: http://dev.otrs.org&lt;/p&gt;</long-description>
@@ -214,8 +214,8 @@
           <description>Returns a ticket based on an ID.</description>
           <long-description></long-description>
           <tag line="160" name="access" description="public"/>
-          <tag line="160" name="param" description="A ticket ID" type="integer" variable="$id">
-            <type by_reference="false">integer</type>
+          <tag line="160" name="param" description="A ticket ID" type="int" variable="$id">
+            <type by_reference="false">int</type>
           </tag>
           <tag line="160" name="param" description="A hash of additional parameters (passed to OTRS)" type="array" variable="$params">
             <type by_reference="false">array</type>
@@ -262,8 +262,8 @@
           <description>Add a new article to an existing ticket.</description>
           <long-description></long-description>
           <tag line="197" name="access" description="public"/>
-          <tag line="197" name="param" description="A ticket ID" type="integer" variable="$id">
-            <type by_reference="false">integer</type>
+          <tag line="197" name="param" description="A ticket ID" type="int" variable="$id">
+            <type by_reference="false">int</type>
           </tag>
           <tag line="197" name="param" description="A hash of parameters (passed to OTRS)" type="array" variable="$params">
             <type by_reference="false">array</type>
@@ -290,8 +290,8 @@
           <description>Edits a ticket based on an ID.</description>
           <long-description></long-description>
           <tag line="220" name="access" description="public"/>
-          <tag line="220" name="param" description="A ticket ID" type="integer" variable="$id">
-            <type by_reference="false">integer</type>
+          <tag line="220" name="param" description="A ticket ID" type="int" variable="$id">
+            <type by_reference="false">int</type>
           </tag>
           <tag line="220" name="param" description="A hash of parameters (passed to OTRS)" type="array" variable="$params">
             <type by_reference="false">array</type>
