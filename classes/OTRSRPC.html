@@ -56,35 +56,37 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method___construct" title="__construct :: Returns a new instance of the OTRSRPC class."><span class="description">Returns a new instance of the OTRSRPC class.</span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method_article_create" title="article_create :: Creates a new article."><span class="description">Creates a new article.</span><pre>article_create()</pre></a></li>
-<li class="method public "><a href="#method_flatten_hash" title="flatten_hash :: Makes a flat list from out of a hash."><span class="description">Makes a flat list from out of a hash.</span><pre>flatten_hash()</pre></a></li>
-<li class="method public "><a href="#method_inflate_array" title="inflate_array :: Makes a hash out of a flat list."><span class="description">Makes a hash out of a flat list.</span><pre>inflate_array()</pre></a></li>
-<li class="method public "><a href="#method_ticket_create" title="ticket_create :: Creates a new ticket."><span class="description">Creates a new ticket.</span><pre>ticket_create()</pre></a></li>
-<li class="method public "><a href="#method_ticket_create_with_article" title="ticket_create_with_article :: Creates a ticket and a related article."><span class="description">Creates a ticket and a related article.</span><pre>ticket_create_with_article()</pre></a></li>
+<li class="method public "><a href="#method___construct" title="__construct :: Creates a new instance of the OTRSRPC class."><span class="description">Creates a new instance of the OTRSRPC class.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_ticket_article_add" title="ticket_article_add :: Add a new article to an existing ticket."><span class="description">Add a new article to an existing ticket.</span><pre>ticket_article_add()</pre></a></li>
+<li class="method public "><a href="#method_ticket_article_create" title="ticket_article_create :: Creates a new ticket with an article."><span class="description">Creates a new ticket with an article.</span><pre>ticket_article_create()</pre></a></li>
 <li class="method public "><a href="#method_ticket_get" title="ticket_get :: Returns a ticket based on an ID."><span class="description">Returns a ticket based on an ID.</span><pre>ticket_get()</pre></a></li>
 <li class="method public "><a href="#method_ticket_list" title="ticket_list :: Returns a list of all tickets (accessible by UserID)"><span class="description">Returns a list of all tickets (accessible by UserID)</span><pre>ticket_list()</pre></a></li>
 <li class="method public "><a href="#method_ticket_list_ids" title="ticket_list_ids :: Returns a list of all ticket IDs (accessible by UserID)"><span class="description">Returns a list of all ticket IDs (accessible by UserID)</span><pre>ticket_list_ids()</pre></a></li>
-<li class="method public "><a href="#method_ticket_number_lookup" title="ticket_number_lookup :: Returns a (formatted) ticket number, based on a ticket ID."><span class="description">Returns a (formatted) ticket number, based on a ticket ID.</span><pre>ticket_number_lookup()</pre></a></li>
 <li class="method public "><a href="#method_ticket_search" title="ticket_search :: Performs a ticket search operation with a given set of parameters and returns a list of IDs."><span class="description">Performs a ticket search operation with a given set of parameters and returns a list of IDs.</span><pre>ticket_search()</pre></a></li>
+<li class="method public "><a href="#method_ticket_update" title="ticket_update :: Edits a ticket based on an ID."><span class="description">Edits a ticket based on an ID.</span><pre>ticket_update()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header private">» Private
-                    <ul><li class="method private "><a href="#method_dispatch_call" title="dispatch_call :: Makes a call to the SOAP Server."><span class="description">Makes a call to the SOAP Server.</span><pre>dispatch_call()</pre></a></li></ul>
+                    <ul>
+<li class="method private "><a href="#method_dispatch_call" title="dispatch_call :: Makes a call to the SOAP Server."><span class="description">Makes a call to the SOAP Server.</span><pre>dispatch_call()</pre></a></li>
+<li class="method private "><a href="#method_object_to_hash" title="object_to_hash :: Converts an object to a hash"><span class="description">Converts an object to a hash</span><pre>object_to_hash()</pre></a></li>
+</ul>
 </li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties
                     <ul>
 <li class="property public "><a href="#property_defaults_article_create" title="$defaults_article_create :: Default parameters for article creation (passed to OTRS)"><span class="description"></span><pre>$defaults_article_create</pre></a></li>
 <li class="property public "><a href="#property_defaults_ticket_create" title="$defaults_ticket_create :: Default parameters for ticket creation (passed to OTRS)"><span class="description"></span><pre>$defaults_ticket_create</pre></a></li>
-<li class="property public "><a href="#property_defaults_ticket_search" title="$defaults_ticket_search :: Default parameters for the ticket search (passed to OTRS)"><span class="description"></span><pre>$defaults_ticket_search</pre></a></li>
 </ul>
 </li>
 <li class="nav-header private">» Private
                     <ul>
-<li class="property private "><a href="#property_client" title="$client :: SOAP client"><span class="description"></span><pre>$client</pre></a></li>
+<li class="property private "><a href="#property_base_url" title="$base_url :: Base URL to the OTRS installation"><span class="description"></span><pre>$base_url</pre></a></li>
+<li class="property private "><a href="#property_login_type" title="$login_type :: OTRS login type"><span class="description"></span><pre>$login_type</pre></a></li>
+<li class="property private "><a href="#property_namespace" title="$namespace :: OTRS SOAP namespace"><span class="description"></span><pre>$namespace</pre></a></li>
 <li class="property private "><a href="#property_password" title="$password :: OTRS SOAP password"><span class="description"></span><pre>$password</pre></a></li>
 <li class="property private "><a href="#property_username" title="$username :: OTRS SOAP username"><span class="description"></span><pre>$username</pre></a></li>
+<li class="property private "><a href="#property_webservice" title="$webservice :: OTRS SOAP webservice"><span class="description"></span><pre>$webservice</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -116,8 +118,8 @@
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
-<h2>Returns a new instance of the OTRSRPC class.</h2>
-<pre>__construct(string $base_url, string $username, string $password) </pre>
+<h2>Creates a new instance of the OTRSRPC class.</h2>
+<pre>__construct(string $base_url, string $username, string $password, string $webservice, string $namespace, string $login_type) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -135,11 +137,21 @@
 <div class="subelement argument">
 <h4>$password</h4>
 <code>string</code><p>OTRS SOAP password</p></div>
+<div class="subelement argument">
+<h4>$webservice</h4>
+<code>string</code><p>OTRS webservice name</p></div>
+<div class="subelement argument">
+<h4>$namespace</h4>
+<code>string</code><p>OTRS namespace</p></div>
+<div class="subelement argument">
+<h4>$login_type</h4>
+<code>string</code><p>The type of login to use (either UserLogin or CustomerUserLogin)</p>
+</div>
 </div></div>
 </div>
-<a id="method_article_create"></a><div class="element clickable method public method_article_create" data-toggle="collapse" data-target=".method_article_create .collapse">
-<h2>Creates a new article.</h2>
-<pre>article_create(integer $id, array $params) : integer</pre>
+<a id="method_ticket_article_add"></a><div class="element clickable method public method_ticket_article_add" data-toggle="collapse" data-target=".method_ticket_article_add .collapse">
+<h2>Add a new article to an existing ticket.</h2>
+<pre>ticket_article_add(integer $id, array $params) : integer</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -159,57 +171,9 @@
 <div class="subelement response"><code>integer</code></div>
 </div></div>
 </div>
-<a id="method_flatten_hash"></a><div class="element clickable method public method_flatten_hash" data-toggle="collapse" data-target=".method_flatten_hash .collapse">
-<h2>Makes a flat list from out of a hash.</h2>
-<pre>flatten_hash(array $arr) : array</pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
-<th>access</th>
-<td>public</td>
-</tr>
-<tr>
-<th>static</th>
-<td></td>
-</tr>
-</table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$arr</h4>
-<code>array</code><p>The hash that should be flattened</p></div>
-<h3>Returns</h3>
-<div class="subelement response"><code>array</code></div>
-</div></div>
-</div>
-<a id="method_inflate_array"></a><div class="element clickable method public method_inflate_array" data-toggle="collapse" data-target=".method_inflate_array .collapse">
-<h2>Makes a hash out of a flat list.</h2>
-<pre>inflate_array(array $arr) : array</pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
-<th>access</th>
-<td>public</td>
-</tr>
-<tr>
-<th>static</th>
-<td></td>
-</tr>
-</table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$arr</h4>
-<code>array</code><p>The list that should be inflated</p></div>
-<h3>Returns</h3>
-<div class="subelement response"><code>array</code></div>
-</div></div>
-</div>
-<a id="method_ticket_create"></a><div class="element clickable method public method_ticket_create" data-toggle="collapse" data-target=".method_ticket_create .collapse">
-<h2>Creates a new ticket.</h2>
-<pre>ticket_create(array $params) : integer</pre>
+<a id="method_ticket_article_create"></a><div class="element clickable method public method_ticket_article_create" data-toggle="collapse" data-target=".method_ticket_article_create .collapse">
+<h2>Creates a new ticket with an article.</h2>
+<pre>ticket_article_create(array $params) : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -221,29 +185,6 @@
 <div class="subelement argument">
 <h4>$params</h4>
 <code>array</code><p>A hash of parameters (passed to OTRS)</p>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code>integer</code></div>
-</div></div>
-</div>
-<a id="method_ticket_create_with_article"></a><div class="element clickable method public method_ticket_create_with_article" data-toggle="collapse" data-target=".method_ticket_create_with_article .collapse">
-<h2>Creates a ticket and a related article.</h2>
-<pre>ticket_create_with_article(array $param_ticket, array $param_article) : array</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>access</th>
-<td>public</td>
-</tr></table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$param_ticket</h4>
-<code>array</code><p>A hash of ticket parameters (passed to OTRS)</p>
-</div>
-<div class="subelement argument">
-<h4>$param_article</h4>
-<code>array</code><p>A hash of article parameters (passed to OTRS)</p>
 </div>
 <h3>Returns</h3>
 <div class="subelement response"><code>array</code></div>
@@ -251,7 +192,7 @@
 </div>
 <a id="method_ticket_get"></a><div class="element clickable method public method_ticket_get" data-toggle="collapse" data-target=".method_ticket_get .collapse">
 <h2>Returns a ticket based on an ID.</h2>
-<pre>ticket_get(integer $id, array $extra_params) : array</pre>
+<pre>ticket_get(integer $id, array $params) : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -264,7 +205,7 @@
 <h4>$id</h4>
 <code>integer</code><p>A ticket ID</p></div>
 <div class="subelement argument">
-<h4>$extra_params</h4>
+<h4>$params</h4>
 <code>array</code><p>A hash of additional parameters (passed to OTRS)</p>
 </div>
 <h3>Returns</h3>
@@ -309,24 +250,6 @@
 <div class="subelement response"><code>array</code></div>
 </div></div>
 </div>
-<a id="method_ticket_number_lookup"></a><div class="element clickable method public method_ticket_number_lookup" data-toggle="collapse" data-target=".method_ticket_number_lookup .collapse">
-<h2>Returns a (formatted) ticket number, based on a ticket ID.</h2>
-<pre>ticket_number_lookup(integer $id) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered"><tr>
-<th>access</th>
-<td>public</td>
-</tr></table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$id</h4>
-<code>integer</code><p>A ticket ID</p></div>
-<h3>Returns</h3>
-<div class="subelement response"><code>string</code></div>
-</div></div>
-</div>
 <a id="method_ticket_search"></a><div class="element clickable method public method_ticket_search" data-toggle="collapse" data-target=".method_ticket_search .collapse">
 <h2>Performs a ticket search operation with a given set of parameters and returns a list of IDs.</h2>
 <pre>ticket_search(array $params) : array</pre>
@@ -346,9 +269,31 @@
 <div class="subelement response"><code>array</code></div>
 </div></div>
 </div>
+<a id="method_ticket_update"></a><div class="element clickable method public method_ticket_update" data-toggle="collapse" data-target=".method_ticket_update .collapse">
+<h2>Edits a ticket based on an ID.</h2>
+<pre>ticket_update(integer $id, array $params) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>integer</code><p>A ticket ID</p></div>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>array</code><p>A hash of parameters (passed to OTRS)</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
 <a id="method_dispatch_call"></a><div class="element clickable method private method_dispatch_call" data-toggle="collapse" data-target=".method_dispatch_call .collapse">
 <h2>Makes a call to the SOAP Server.</h2>
-<pre>dispatch_call(array $params) </pre>
+<pre>dispatch_call(string $endpoint, array $params) : mixed</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -358,9 +303,38 @@
 </tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
+<h4>$endpoint</h4>
+<code>string</code><p>Name of the generic OTRS endpoint</p></div>
+<div class="subelement argument">
 <h4>$params</h4>
-<code>array</code><p>A list (flattened hash) of parameters (passed to OTRS)</p>
+<code>array</code><p>A hash of parameters (passed to OTRS)</p>
 </div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a id="method_object_to_hash"></a><div class="element clickable method private method_object_to_hash" data-toggle="collapse" data-target=".method_object_to_hash .collapse">
+<h2>Converts an object to a hash</h2>
+<pre>object_to_hash(object $obj) : array</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>private</td>
+</tr>
+<tr>
+<th>static</th>
+<td></td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$obj</h4>
+<code>object</code><p>Object to convert</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
 </div></div>
 </div>
 <h3>
@@ -389,21 +363,33 @@
 </tr></table>
 </div></div>
 </div>
-<a id="property_defaults_ticket_search"> </a><div class="element clickable property public property_defaults_ticket_search" data-toggle="collapse" data-target=".property_defaults_ticket_search .collapse">
+<a id="property_base_url"> </a><div class="element clickable property private property_base_url" data-toggle="collapse" data-target=".property_base_url .collapse">
 <h2></h2>
-<pre>$defaults_ticket_search </pre>
+<pre>$base_url </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <table class="table table-bordered"><tr>
 <th>access</th>
-<td>public</td>
+<td>private</td>
 </tr></table>
 </div></div>
 </div>
-<a id="property_client"> </a><div class="element clickable property private property_client" data-toggle="collapse" data-target=".property_client .collapse">
+<a id="property_login_type"> </a><div class="element clickable property private property_login_type" data-toggle="collapse" data-target=".property_login_type .collapse">
 <h2></h2>
-<pre>$client </pre>
+<pre>$login_type </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_namespace"> </a><div class="element clickable property private property_namespace" data-toggle="collapse" data-target=".property_namespace .collapse">
+<h2></h2>
+<pre>$namespace </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
@@ -437,6 +423,18 @@
 </tr></table>
 </div></div>
 </div>
+<a id="property_webservice"> </a><div class="element clickable property private property_webservice" data-toggle="collapse" data-target=".property_webservice .collapse">
+<h2></h2>
+<pre>$webservice </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
 </div>
 </div>
 </div>
@@ -444,7 +442,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-04-04T10:18:02+02:00.<br></footer></div>
+            generated on 2013-04-04T15:23:12+02:00.<br></footer></div>
 </div>
 </body>
 </html>

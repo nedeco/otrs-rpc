@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project version="2.0.0a12" title="">
-  <file path="otrs_rpc.php" hash="636eb5c56ddee91d6e15b9419e9f1a53" package="otrs\rpc">
+  <file path="otrs_rpc.php" hash="f4047c3f7956d250072c0d1c04c034a1" package="otrs\rpc">
     <docblock line="2">
       <description>PHP interface to OTRS' RPC interface.</description>
       <long-description>&lt;p&gt;OTRS API documentation: http://dev.otrs.org&lt;/p&gt;</long-description>
@@ -19,212 +19,234 @@
         <tag line="11" name="author" description="Daniel Kempkens &lt;d.kempkens@nedeco.de&gt;"/>
       </docblock>
       <property final="false" static="false" visibility="public" line="23" namespace="global" package="Default">
-        <name>$defaults_ticket_search</name>
-        <default>array("UserID" =&gt; OTRS_DEFAULT_USER_ID)</default>
+        <name>$defaults_ticket_create</name>
+        <default>array("QueueID" =&gt; OTRS_DEFAULT_QUEUE_ID, "TypeID" =&gt; OTRS_DEFAULT_TYPE_ID, "PriorityID" =&gt; OTRS_DEFAULT_PRIORITY_ID, "State" =&gt; "new")</default>
         <docblock line="18">
-          <description>Default parameters for the ticket search (passed to OTRS)</description>
+          <description>Default parameters for ticket creation (passed to OTRS)</description>
           <long-description></long-description>
           <tag line="18" name="access" description="public"/>
         </docblock>
       </property>
-      <property final="false" static="false" visibility="public" line="32" namespace="global" package="Default">
-        <name>$defaults_ticket_create</name>
-        <default>array("QueueID" =&gt; OTRS_DEFAULT_QUEUE_ID, "LockID" =&gt; 1, "PriorityID" =&gt; OTRS_DEFAULT_PRIORITY_ID, "State" =&gt; "new")</default>
-        <docblock line="27">
-          <description>Default parameters for ticket creation (passed to OTRS)</description>
-          <long-description></long-description>
-          <tag line="27" name="access" description="public"/>
-        </docblock>
-      </property>
-      <property final="false" static="false" visibility="public" line="44" namespace="global" package="Default">
+      <property final="false" static="false" visibility="public" line="35" namespace="global" package="Default">
         <name>$defaults_article_create</name>
-        <default>array("ContentType" =&gt; "text/plain; charset=UTF-8")</default>
-        <docblock line="39">
+        <default>array("MimeType" =&gt; "text/plain", "Charset" =&gt; "utf8")</default>
+        <docblock line="30">
           <description>Default parameters for article creation (passed to OTRS)</description>
           <long-description></long-description>
-          <tag line="39" name="access" description="public"/>
+          <tag line="30" name="access" description="public"/>
         </docblock>
       </property>
-      <property final="false" static="false" visibility="private" line="53" namespace="global" package="Default">
+      <property final="false" static="false" visibility="private" line="45" namespace="global" package="Default">
+        <name>$base_url</name>
+        <default></default>
+        <docblock line="40">
+          <description>Base URL to the OTRS installation</description>
+          <long-description></long-description>
+          <tag line="40" name="access" description="private"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="52" namespace="global" package="Default">
         <name>$username</name>
         <default></default>
-        <docblock line="48">
+        <docblock line="47">
           <description>OTRS SOAP username</description>
           <long-description></long-description>
-          <tag line="48" name="access" description="private"/>
+          <tag line="47" name="access" description="private"/>
         </docblock>
       </property>
-      <property final="false" static="false" visibility="private" line="60" namespace="global" package="Default">
+      <property final="false" static="false" visibility="private" line="59" namespace="global" package="Default">
         <name>$password</name>
         <default></default>
-        <docblock line="55">
+        <docblock line="54">
           <description>OTRS SOAP password</description>
           <long-description></long-description>
-          <tag line="55" name="access" description="private"/>
+          <tag line="54" name="access" description="private"/>
         </docblock>
       </property>
-      <property final="false" static="false" visibility="private" line="67" namespace="global" package="Default">
-        <name>$client</name>
+      <property final="false" static="false" visibility="private" line="66" namespace="global" package="Default">
+        <name>$webservice</name>
         <default></default>
-        <docblock line="62">
-          <description>SOAP client</description>
+        <docblock line="61">
+          <description>OTRS SOAP webservice</description>
           <long-description></long-description>
-          <tag line="62" name="access" description="private"/>
+          <tag line="61" name="access" description="private"/>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="78" package="otrs\rpc">
+      <property final="false" static="false" visibility="private" line="73" namespace="global" package="Default">
+        <name>$namespace</name>
+        <default></default>
+        <docblock line="68">
+          <description>OTRS SOAP namespace</description>
+          <long-description></long-description>
+          <tag line="68" name="access" description="private"/>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="80" namespace="global" package="Default">
+        <name>$login_type</name>
+        <default></default>
+        <docblock line="75">
+          <description>OTRS login type</description>
+          <long-description></long-description>
+          <tag line="75" name="access" description="private"/>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="94" package="otrs\rpc">
         <name>__construct</name>
         <full_name>__construct</full_name>
-        <docblock line="69">
-          <description>Returns a new instance of the OTRSRPC class.</description>
+        <docblock line="82">
+          <description>Creates a new instance of the OTRSRPC class.</description>
           <long-description></long-description>
-          <tag line="69" name="access" description="public"/>
-          <tag line="69" name="param" description="Base URL of the OTRS installation" type="string" variable="$base_url">
+          <tag line="82" name="access" description="public"/>
+          <tag line="82" name="param" description="Base URL of the OTRS installation" type="string" variable="$base_url">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="69" name="param" description="OTRS SOAP username" type="string" variable="$username">
+          <tag line="82" name="param" description="OTRS SOAP username" type="string" variable="$username">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="69" name="param" description="OTRS SOAP password" type="string" variable="$password">
+          <tag line="82" name="param" description="OTRS SOAP password" type="string" variable="$password">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="82" name="param" description="OTRS webservice name" type="string" variable="$webservice">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="82" name="param" description="OTRS namespace" type="string" variable="$namespace">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="82" name="param" description="The type of login to use (either UserLogin or CustomerUserLogin)" type="string" variable="$login_type">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="78">
+        <argument line="94">
           <name>$base_url</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="78">
+        <argument line="94">
           <name>$username</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="78">
+        <argument line="94">
           <name>$password</name>
           <default></default>
           <type/>
         </argument>
+        <argument line="94">
+          <name>$webservice</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="94">
+          <name>$namespace</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="94">
+          <name>$login_type</name>
+          <default>'UserLogin'</default>
+          <type/>
+        </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="100" package="otrs\rpc">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="112" package="otrs\rpc">
         <name>ticket_list</name>
         <full_name>ticket_list</full_name>
-        <docblock line="91">
+        <docblock line="103">
           <description>Returns a list of all tickets (accessible by UserID)</description>
           <long-description></long-description>
-          <tag line="91" name="access" description="public"/>
-          <tag line="91" name="param" description="A hash of additional parameters (passed to OTRS)" type="array" variable="$params">
+          <tag line="103" name="access" description="public"/>
+          <tag line="103" name="param" description="A hash of additional parameters (passed to OTRS)" type="array" variable="$params">
             <type by_reference="false">array</type>
           </tag>
-          <tag line="91" name="return" description="" type="array">
+          <tag line="103" name="return" description="" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
-        <argument line="100">
+        <argument line="112">
           <name>$params</name>
           <default>array()</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="126" package="otrs\rpc">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="138" package="otrs\rpc">
         <name>ticket_list_ids</name>
         <full_name>ticket_list_ids</full_name>
-        <docblock line="117">
+        <docblock line="129">
           <description>Returns a list of all ticket IDs (accessible by UserID)</description>
           <long-description></long-description>
-          <tag line="117" name="access" description="public"/>
-          <tag line="117" name="param" description="A hash of additional parameters (passed to OTRS)" type="array" variable="$params">
+          <tag line="129" name="access" description="public"/>
+          <tag line="129" name="param" description="A hash of additional parameters (passed to OTRS)" type="array" variable="$params">
             <type by_reference="false">array</type>
           </tag>
-          <tag line="117" name="return" description="" type="array">
+          <tag line="129" name="return" description="" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
-        <argument line="126">
+        <argument line="138">
           <name>$params</name>
           <default>array()</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="139" package="otrs\rpc">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="151" package="otrs\rpc">
         <name>ticket_search</name>
         <full_name>ticket_search</full_name>
-        <docblock line="130">
+        <docblock line="142">
           <description>Performs a ticket search operation with a given set of parameters and returns a list of IDs.</description>
           <long-description></long-description>
-          <tag line="130" name="access" description="public"/>
-          <tag line="130" name="param" description="A hash of parameters (passed to OTRS)" type="array" variable="$params">
+          <tag line="142" name="access" description="public"/>
+          <tag line="142" name="param" description="A hash of parameters (passed to OTRS)" type="array" variable="$params">
             <type by_reference="false">array</type>
           </tag>
-          <tag line="130" name="return" description="" type="array">
+          <tag line="142" name="return" description="" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
-        <argument line="139">
+        <argument line="151">
           <name>$params</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="161" package="otrs\rpc">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="170" package="otrs\rpc">
         <name>ticket_get</name>
         <full_name>ticket_get</full_name>
-        <docblock line="151">
+        <docblock line="160">
           <description>Returns a ticket based on an ID.</description>
           <long-description></long-description>
-          <tag line="151" name="access" description="public"/>
-          <tag line="151" name="param" description="A ticket ID" type="integer" variable="$id">
+          <tag line="160" name="access" description="public"/>
+          <tag line="160" name="param" description="A ticket ID" type="integer" variable="$id">
             <type by_reference="false">integer</type>
           </tag>
-          <tag line="151" name="param" description="A hash of additional parameters (passed to OTRS)" type="array" variable="$extra_params">
+          <tag line="160" name="param" description="A hash of additional parameters (passed to OTRS)" type="array" variable="$params">
             <type by_reference="false">array</type>
           </tag>
-          <tag line="151" name="return" description="" type="array">
+          <tag line="160" name="return" description="" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
-        <argument line="161">
+        <argument line="170">
           <name>$id</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="161">
-          <name>$extra_params</name>
+        <argument line="170">
+          <name>$params</name>
           <default>array()</default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="176" package="otrs\rpc">
-        <name>ticket_number_lookup</name>
-        <full_name>ticket_number_lookup</full_name>
-        <docblock line="167">
-          <description>Returns a (formatted) ticket number, based on a ticket ID.</description>
-          <long-description></long-description>
-          <tag line="167" name="access" description="public"/>
-          <tag line="167" name="param" description="A ticket ID" type="integer" variable="$id">
-            <type by_reference="false">integer</type>
-          </tag>
-          <tag line="167" name="return" description="" type="string">
-            <type by_reference="false">string</type>
-          </tag>
-        </docblock>
-        <argument line="176">
-          <name>$id</name>
-          <default></default>
           <type/>
         </argument>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="191" package="otrs\rpc">
-        <name>ticket_create</name>
-        <full_name>ticket_create</full_name>
+        <name>ticket_article_create</name>
+        <full_name>ticket_article_create</full_name>
         <docblock line="182">
-          <description>Creates a new ticket.</description>
+          <description>Creates a new ticket with an article.</description>
           <long-description></long-description>
           <tag line="182" name="access" description="public"/>
           <tag line="182" name="param" description="A hash of parameters (passed to OTRS)" type="array" variable="$params">
             <type by_reference="false">array</type>
           </tag>
-          <tag line="182" name="return" description="" type="integer">
-            <type by_reference="false">integer</type>
+          <tag line="182" name="return" description="" type="array">
+            <type by_reference="false">array</type>
           </tag>
         </docblock>
         <argument line="191">
@@ -233,117 +255,107 @@
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="208" package="otrs\rpc">
-        <name>article_create</name>
-        <full_name>article_create</full_name>
-        <docblock line="198">
-          <description>Creates a new article.</description>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="207" package="otrs\rpc">
+        <name>ticket_article_add</name>
+        <full_name>ticket_article_add</full_name>
+        <docblock line="197">
+          <description>Add a new article to an existing ticket.</description>
           <long-description></long-description>
-          <tag line="198" name="access" description="public"/>
-          <tag line="198" name="param" description="A ticket ID" type="integer" variable="$id">
+          <tag line="197" name="access" description="public"/>
+          <tag line="197" name="param" description="A ticket ID" type="integer" variable="$id">
             <type by_reference="false">integer</type>
           </tag>
-          <tag line="198" name="param" description="A hash of parameters (passed to OTRS)" type="array" variable="$params">
+          <tag line="197" name="param" description="A hash of parameters (passed to OTRS)" type="array" variable="$params">
             <type by_reference="false">array</type>
           </tag>
-          <tag line="198" name="return" description="" type="integer">
+          <tag line="197" name="return" description="" type="integer">
             <type by_reference="false">integer</type>
           </tag>
         </docblock>
-        <argument line="208">
+        <argument line="207">
           <name>$id</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="208">
+        <argument line="207">
           <name>$params</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="225" package="otrs\rpc">
-        <name>ticket_create_with_article</name>
-        <full_name>ticket_create_with_article</full_name>
-        <docblock line="215">
-          <description>Creates a ticket and a related article.</description>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="230" package="otrs\rpc">
+        <name>ticket_update</name>
+        <full_name>ticket_update</full_name>
+        <docblock line="220">
+          <description>Edits a ticket based on an ID.</description>
           <long-description></long-description>
-          <tag line="215" name="access" description="public"/>
-          <tag line="215" name="param" description="A hash of ticket parameters (passed to OTRS)" type="array" variable="$param_ticket">
+          <tag line="220" name="access" description="public"/>
+          <tag line="220" name="param" description="A ticket ID" type="integer" variable="$id">
+            <type by_reference="false">integer</type>
+          </tag>
+          <tag line="220" name="param" description="A hash of parameters (passed to OTRS)" type="array" variable="$params">
             <type by_reference="false">array</type>
           </tag>
-          <tag line="215" name="param" description="A hash of article parameters (passed to OTRS)" type="array" variable="$param_article">
-            <type by_reference="false">array</type>
-          </tag>
-          <tag line="215" name="return" description="" type="array">
+          <tag line="220" name="return" description="" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
-        <argument line="225">
-          <name>$param_ticket</name>
+        <argument line="230">
+          <name>$id</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="225">
-          <name>$param_article</name>
+        <argument line="230">
+          <name>$params</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="242" package="otrs\rpc">
+      <method final="false" abstract="false" static="false" visibility="private" namespace="global" line="248" package="otrs\rpc">
         <name>dispatch_call</name>
         <full_name>dispatch_call</full_name>
-        <docblock line="235">
+        <docblock line="238">
           <description>Makes a call to the SOAP Server.</description>
           <long-description></long-description>
-          <tag line="235" name="access" description="private"/>
-          <tag line="235" name="param" description="A list (flattened hash) of parameters (passed to OTRS)" type="array" variable="$params">
+          <tag line="238" name="access" description="private"/>
+          <tag line="238" name="param" description="Name of the generic OTRS endpoint" type="string" variable="$endpoint">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="238" name="param" description="A hash of parameters (passed to OTRS)" type="array" variable="$params">
             <type by_reference="false">array</type>
           </tag>
+          <tag line="238" name="return" description="" type="mixed">
+            <type by_reference="false">mixed</type>
+          </tag>
         </docblock>
-        <argument line="242">
+        <argument line="248">
+          <name>$endpoint</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="248">
           <name>$params</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="262" package="otrs\rpc">
-        <name>flatten_hash</name>
-        <full_name>flatten_hash</full_name>
-        <docblock line="252">
-          <description>Makes a flat list from out of a hash.</description>
-          <long-description></long-description>
-          <tag line="252" name="access" description="public"/>
-          <tag line="252" name="static" description=""/>
-          <tag line="252" name="param" description="The hash that should be flattened" type="array" variable="$arr">
-            <type by_reference="false">array</type>
-          </tag>
-          <tag line="252" name="return" description="" type="array">
-            <type by_reference="false">array</type>
-          </tag>
-        </docblock>
-        <argument line="262">
-          <name>$arr</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="global" line="286" package="otrs\rpc">
-        <name>inflate_array</name>
-        <full_name>inflate_array</full_name>
+      <method final="false" abstract="false" static="true" visibility="private" namespace="global" line="286" package="otrs\rpc">
+        <name>object_to_hash</name>
+        <full_name>object_to_hash</full_name>
         <docblock line="276">
-          <description>Makes a hash out of a flat list.</description>
+          <description>Converts an object to a hash</description>
           <long-description></long-description>
-          <tag line="276" name="access" description="public"/>
+          <tag line="276" name="access" description="private"/>
           <tag line="276" name="static" description=""/>
-          <tag line="276" name="param" description="The list that should be inflated" type="array" variable="$arr">
-            <type by_reference="false">array</type>
+          <tag line="276" name="param" description="Object to convert" type="object" variable="$obj">
+            <type by_reference="false">object</type>
           </tag>
           <tag line="276" name="return" description="" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
         <argument line="286">
-          <name>$arr</name>
+          <name>$obj</name>
           <default></default>
           <type/>
         </argument>
